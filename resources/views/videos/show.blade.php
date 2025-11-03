@@ -1,18 +1,31 @@
 <x-app-layout>
-    <div class="py-12 bg-gray-900">
+    <div class="py-12 bg-gray-900" x-data="{ playing: false }">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
 
-                    <!-- Universal Video Player -->
-                    <div class="aspect-w-16 aspect-h-9">
-                        @if($video->video_type == 'youtube')
-                            <iframe class="w-full h-full rounded-lg" src="https://www.youtube.com/embed/{{ $video->video_url }}" title="{{ $video->title }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                        @elseif($video->video_type == 'vimeo')
-                            <iframe class="w-full h-full rounded-lg" src="https://player.vimeo.com/video/{{ $video->video_url }}" title="{{ $video->title }}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
-                        @elseif($video->video_type == 'direct')
-                            <video src="{{ $video->video_url }}" controls class="w-full h-full rounded-lg"></video>
-                        @endif
+                    <!-- UPGRADED Universal Video Player with Click-to-Play -->
+                    <div class="relative aspect-w-16 aspect-h-9">
+                        <!-- 1. The Thumbnail Image (Visible by default) -->
+                        <div x-show="!playing" class="absolute inset-0 flex items-center justify-center cursor-pointer">
+                            <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" class="w-full h-full object-cover rounded-lg">
+                            <button @click="playing = true" class="absolute z-10 p-4 bg-red-600 rounded-full hover:bg-red-700 transition">
+                                <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"></path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- 2. The Video Iframe (Hidden until 'playing' is true) -->
+                        <div x-show="playing" x-cloak class="absolute inset-0">
+                            @if($video->video_type == 'youtube')
+                                <iframe class="w-full h-full rounded-lg" src="https://www.youtube.com/embed/{{ $video->video_url }}?autoplay=1" title="{{ $video->title }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            @elseif($video->video_type == 'vimeo')
+                                <iframe class="w-full h-full rounded-lg" src="https://player.vimeo.com/video/{{ $video->video_url }}?autoplay=1" title="{{ $video->title }}" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                            @elseif($video->video_type == 'direct')
+                                <video src="{{ $video->video_url }}" controls class="w-full h-full rounded-lg" autoplay></video>
+                            @endif
+                        </div>
                     </div>
 
                     <!-- Video Details -->
@@ -26,7 +39,7 @@
                         </p>
                     </div>
 
-                    <!-- Like/Unlike Button will be fixed in the next section -->
+                    <!-- Like/Unlike Button -->
                     <div class="mt-6" id="like-section">
                         @auth
                             <form method="POST" action="{{ route('videos.like', $video) }}">
