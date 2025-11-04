@@ -3,13 +3,14 @@
 use Illuminate\Support\Facades\Route;
 
 // --- Import All Necessary Controllers ---
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LikeController;
-use App\Http\Controllers\VideoController; // Public-facing controller
-use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
-use App\Http\Controllers\Admin\VideoController as AdminVideoController; // <-- THIS LINE IS CRUCIAL. It defines the alias.
+use App\Http\Controllers\VideoController;
+use App\Http\Controllers\CategoryController;
+// --- Import Admin Controllers with Aliases ---
+use App\Http\Controllers\Admin\VideoController as AdminVideoController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController; // <-- THIS IS THE NEW, CRUCIAL LINE
 
 /*
 |--------------------------------------------------------------------------
@@ -20,12 +21,14 @@ use App\Http\Controllers\Admin\VideoController as AdminVideoController; // <-- T
 // --- Public-Facing Routes ---
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/videos/{video}', [VideoController::class, 'show'])->name('videos.show');
+Route::get('/categories/{category:slug}', [CategoryController::class, 'show'])->name('categories.show');
+Route::get('/search', [HomeController::class, 'search'])->name('search');
 
 // --- Like/Unlike Route ---
 Route::post('/videos/{video}/like', [LikeController::class, 'toggle'])->name('videos.like')->middleware('auth');
 
 
-// --- Standard Authentication Routes (from Laravel Breeze) ---
+// --- Standard Authentication Routes ---
 Route::get('/dashboard', function () {
     return redirect()->route('home');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -36,14 +39,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/categories/{category:slug}', [CategoryController::class, 'show'])->name('categories.show');
-Route::get('/search', [HomeController::class, 'search'])->name('search');
+
 // --- Admin Routes ---
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    // --- THIS LINE IS NOW CORRECT ---
-    // It correctly uses the aliased AdminVideoController
     Route::resource('videos', AdminVideoController::class);
-    Route::resource('categories', CategoryController::class);
+    // --- THIS LINE IS NOW CORRECTED ---
+    // It now correctly uses the aliased AdminCategoryController
+    Route::resource('categories', AdminCategoryController::class);
 });
 
 
