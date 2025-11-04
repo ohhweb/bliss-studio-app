@@ -3,11 +3,12 @@
 use Illuminate\Support\Facades\Route;
 
 // --- Import All Necessary Controllers ---
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\VideoController; // Public-facing controller
-use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\VideoController as AdminVideoController; // <-- THIS LINE IS CRUCIAL. It defines the alias.
 
 /*
@@ -35,7 +36,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
+Route::get('/categories/{category:slug}', [CategoryController::class, 'show'])->name('categories.show');
+Route::get('/search', [HomeController::class, 'search'])->name('search');
 // --- Admin Routes ---
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     // --- THIS LINE IS NOW CORRECT ---

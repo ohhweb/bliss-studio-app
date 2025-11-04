@@ -6,7 +6,9 @@
             @foreach ($categories as $category)
                 <div class="mb-8">
                     <!-- Category Title -->
-                    <h2 class="text-2xl font-bold text-white mb-4">{{ $category->name }}</h2>
+                   <a href="{{ route('categories.show', $category) }}" class="inline-block">
+                      <h2 class="text-2xl font-bold text-white mb-4 hover:text-amber-500 transition-colors">{{ $category->name }}</h2>
+                    </a>
 
                     <!-- Grid for the videos in this category -->
                     <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">

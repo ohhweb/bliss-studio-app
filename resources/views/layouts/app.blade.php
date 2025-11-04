@@ -10,7 +10,9 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
+<!-- PWA Manifest Link -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#111827">
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
@@ -32,5 +34,20 @@
                 {{ $slot }}
             </main>
         </div>
+        <!-- Before the </body> tag of app.blade.php -->
+
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => {
+                    console.log('Service Worker registered!');
+                })
+                .catch(err => {
+                    console.log('Service Worker registration failed: ', err);
+                });
+        });
+    }
+</script>
     </body>
 </html>

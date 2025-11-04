@@ -1,21 +1,35 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers; // <-- CORRECTED: No hyphen, correct spelling
 
-use App\Models\Category; // <-- THIS IS THE MISSING LINE
+use App\Http\Controllers\Controller; // <-- This now works correctly
+use App\Models\Category;
+use App\Models\Video;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Display the homepage with categories and videos.
      */
     public function index()
     {
-        // Fetch all categories that have at least one video,
-        // and also load the video relationships for each category.
         $categories = Category::has('videos')->with('videos')->get();
-
         return view('home', compact('categories'));
+    }
+
+    /**
+     * Search for videos based on a query.
+     */
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+        $videos = Video::where('title', 'LIKE', "%{$query}%")
+                       ->orWhere('description', 'LIKE', "%{$query}%")
+                       ->latest()
+                       ->paginate(12);
+
+        return view('search', compact('videos', 'query'));
     }
 }
