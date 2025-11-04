@@ -31,4 +31,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Video::class, 'watchlists');
     }
+        public function watchedHistory(): BelongsToMany
+    {
+        // withTimestamps() is important to automatically update the 'updated_at' timestamp
+        return $this->belongsToMany(Video::class, 'watched_histories')->withTimestamps();
+    }
 }

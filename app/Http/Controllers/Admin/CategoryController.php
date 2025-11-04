@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Admin; // <-- This namespace is crucial
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str; // Import the Str class to generate slugs
+use Illuminate\Support\Str;
 
-class CategoryController extends Controller // <-- The class name must be correct
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,26 +31,25 @@ class CategoryController extends Controller // <-- The class name must be correc
      */
     public function store(Request $request)
     {
-        // Validate the incoming 'name' field
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:categories'
         ]);
 
-        // Create the category and automatically generate the slug from the name
         Category::create([
             'name' => $validated['name'],
             'slug' => Str::slug($validated['name'])
         ]);
 
-        return redirect()->route('categories.index')->with('success', 'Category created successfully.');
+        // --- CORRECTED ROUTE NAME ---
+        return redirect()->route('admin.categories.index')->with('success', 'Category created successfully.');
     }
 
     /**
-     * Display the specified resource. We are not using this page.
+     * Display the specified resource.
      */
     public function show(Category $category)
     {
-        //
+        // Not used in admin panel
     }
 
     /**
@@ -66,18 +65,17 @@ class CategoryController extends Controller // <-- The class name must be correc
      */
     public function update(Request $request, Category $category)
     {
-        // Validate, ensuring the 'name' is unique but ignoring the current category's name
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id
         ]);
 
-        // Update the category and its slug
         $category->update([
             'name' => $validated['name'],
             'slug' => Str::slug($validated['name'])
         ]);
 
-        return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
+        // --- CORRECTED ROUTE NAME ---
+        return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully.');
     }
 
     /**
@@ -86,6 +84,8 @@ class CategoryController extends Controller // <-- The class name must be correc
     public function destroy(Category $category)
     {
         $category->delete();
-        return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
+
+        // --- CORRECTED ROUTE NAME ---
+        return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully.');
     }
 }

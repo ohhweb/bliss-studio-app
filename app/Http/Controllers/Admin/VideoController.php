@@ -1,35 +1,27 @@
 <?php
 
-namespace App\Http\Controllers\Admin; // <-- CORRECTED: Must be in the 'Admin' namespace
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Video;
 use Illuminate\Http\Request;
 
+// The class name MUST match the filename "VideoController.php"
 class VideoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $videos = Video::latest()->paginate(10);
         return view('admin.videos.index', compact('videos'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $categories = Category::all();
         return view('admin.videos.create', compact('categories'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -42,29 +34,20 @@ class VideoController extends Controller
         ]);
 
         Video::create($validated);
-        return redirect()->route('videos.index')->with('success', 'Video added successfully!');
+        return redirect()->route('admin.videos.index')->with('success', 'Video added successfully!');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Video $video)
     {
-        // Not used in the admin panel, can be left empty
+        // Not used
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Video $video)
     {
         $categories = Category::all();
         return view('admin.videos.edit', compact('video', 'categories'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Video $video)
     {
         $validated = $request->validate([
@@ -77,15 +60,12 @@ class VideoController extends Controller
         ]);
 
         $video->update($validated);
-        return redirect()->route('videos.index')->with('success', 'Video updated successfully!');
+        return redirect()->route('admin.videos.index')->with('success', 'Video updated successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Video $video)
     {
         $video->delete();
-        return redirect()->route('videos.index')->with('success', 'Video deleted successfully!');
+        return redirect()->route('admin.videos.index')->with('success', 'Video deleted successfully!');
     }
 }
