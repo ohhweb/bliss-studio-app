@@ -51,7 +51,7 @@
                     </x-nav-link>
                     <div class="flex items-center ml-4">
                         <form method="GET" action="{{ route('search') }}">
-                            <input type="text" name="query" placeholder="Search for videos..." class="bg-gray-700 text-white border-gray-600 rounded-md py-1 px-2 text-sm focus:ring-amber-500 focus:border-amber-500">
+                            <input type="text" name="query" placeholder="Search for videos..." class="border-gray-600 rounded-md py-1 px-2 text-sm focus:ring-amber-500 focus:border-amber-500">
                         </form>
                     </div>
                 </div>
