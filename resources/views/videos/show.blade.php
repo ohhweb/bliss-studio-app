@@ -17,7 +17,7 @@
                         </div>
 
                         <!-- 2. The Video Iframe (Hidden until 'playing' is true) -->
-                        <!-- <div x-show="playing" x-cloak class="absolute inset-0">
+                        <div x-show="playing" x-cloak class="absolute inset-0">
                             @if($video->video_type == 'youtube')
                                 <iframe class="w-full h-full rounded-lg" src="https://www.youtube.com/embed/{{ $video->video_url }}?autoplay=1" title="{{ $video->title }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                             @elseif($video->video_type == 'vimeo')
@@ -25,7 +25,7 @@
                             @elseif($video->video_type == 'direct')
                                 <video src="{{ $video->video_url }}" controls class="w-full h-full rounded-lg" autoplay></video>
                             @endif
-                        </div> -->
+                        </div>
                     </div>
 
                     <!-- Video Details -->
