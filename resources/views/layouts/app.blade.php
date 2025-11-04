@@ -35,6 +35,8 @@
             <main>
                 {{ $slot }}
             </main>
+             {{-- Include the bottom navigation bar --}}
+            @include('layouts.bottom-nav')
         </div>
 
         <!-- PWA Install Button for Android/Windows -->

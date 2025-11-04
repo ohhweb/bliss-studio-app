@@ -16,4 +16,10 @@ class CategoryController extends Controller
         $videos = $category->videos()->latest()->paginate(12);
         return view('categories.show', compact('category', 'videos'));
     }
+    public function index() // <-- ADD THIS METHOD
+{
+    // Fetch all categories that have at least one video
+    $categories = Category::has('videos')->orderBy('name')->get();
+    return view('categories.index', compact('categories'));
+}
 }

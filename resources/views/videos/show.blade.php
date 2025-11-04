@@ -40,8 +40,9 @@
                     </div>
 
                     <!-- Like/Unlike Button -->
-                    <div class="mt-6" id="like-section">
+                    <div class="mt-6 flex items-center space-x-4">
                         @auth
+                            <!-- Like/Unlike Button Form -->
                             <form method="POST" action="{{ route('videos.like', $video) }}">
                                 @csrf
                                 <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -52,9 +53,22 @@
                                     @endif
                                 </button>
                             </form>
+
+                            <!-- Watchlist Button Form -->
+                            <form method="POST" action="{{ route('videos.watchlist.toggle', $video) }}">
+                                @csrf
+                                <button type="submit" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                                    @if(Auth::user()->watchlist()->where('video_id', $video->id)->exists())
+                                        - Remove from Watchlist
+                                    @else
+                                        + Add to Watchlist
+                                    @endif
+                                </button>
+                            </form>
+
                         @else
                             <p class="text-white">
-                                <a href="{{ route('login') }}" class="font-bold underline">Log in</a> to like this video.
+                                <a href="{{ route('login') }}" class="font-bold underline">Log in</a> to like or add to watchlist.
                                 ({{ $video->likes()->count() }} likes)
                             </p>
                         @endauth

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 // --- Import All Necessary Controllers ---
+use App\Http\Controllers\WatchlistController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LikeController;
@@ -39,7 +40,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
+Route::get('/search-form', [HomeController::class, 'showSearchForm'])->name('search.form');
+Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index'); // <-- ADD THIS LINE
 // --- Admin Routes ---
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::resource('videos', AdminVideoController::class);
@@ -48,6 +50,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::resource('categories', AdminCategoryController::class);
 });
 
-
+// --- Watchlist Add/Remove Route ---
+Route::post('/videos/{video}/watchlist', [WatchlistController::class, 'toggle'])->name('videos.watchlist.toggle')->middleware('auth'); // <-- ADD THIS LINE
 // --- Include Breeze's Auth Routes (login, register, etc.) ---
 require __DIR__.'/auth.php';
