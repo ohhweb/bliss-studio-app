@@ -3,54 +3,44 @@
     <div class="bg-primary text-white">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-8">
 
-            <!-- Hero Section for Featured Video -->
+            <!-- Hero Section (No changes here) -->
             @if($featuredVideo)
-            <div class="mb-12 rounded-lg overflow-hidden relative aspect-w-16 aspect-h-9">
-                <img src="{{ $featuredVideo->thumbnail_url }}" alt="{{ $featuredVideo->title }}" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-                
-                <!-- RESPONSIVE FIX APPLIED TO THIS BLOCK -->
-                <div class="absolute bottom-0 left-0 p-4 md:p-8">
-                    <h1 class="text-2xl md:text-4xl font-bold mb-2 leading-tight">{{ $featuredVideo->title }}</h1>
-                    <p class="hidden md:block text-gray-300 max-w-2xl mb-4 truncate">{{ $featuredVideo->description }}</p>
-                    <div class="flex items-center space-x-4 mt-4">
-                        <a href="{{ route('videos.show', $featuredVideo) }}" class="bg-accent hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-full transition text-sm md:text-base">
-                            Play
-                        </a>
-                        
-                        <!-- WATCHLIST BUTTON IMPLEMENTATION -->
-                        @auth
-                        <form method="POST" action="{{ route('videos.watchlist.toggle', $featuredVideo) }}">
-                            @csrf
-                            <button type-="submit" class="text-white font-semibold text-sm md:text-base bg-black/30 hover:bg-black/50 py-2 px-4 rounded-full transition">
-                                @if(Auth::user()->watchlist()->where('video_id', $featuredVideo->id)->exists())
-                                    ✓ Added to Watchlist
-                                @else
-                                    + Add to Watchlist
-                                @endif
-                            </button>
-                        </form>
-                        @else
-                            {{-- Optional: Show a disabled button or nothing for guests --}}
-                            <a href="{{ route('login') }}" class="text-white font-semibold text-sm md:text-base bg-black/30 hover:bg-black/50 py-2 px-4 rounded-full transition">
-                                + Add to Watchlist
+                {{-- ... Your existing Hero Section code ... --}}
+                <div class="mb-12 rounded-lg overflow-hidden relative aspect-w-16 aspect-h-9">
+                    <img src="{{ $featuredVideo->thumbnail_url }}" alt="{{ $featuredVideo->title }}" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-4 md:p-8">
+                        <h1 class="text-2xl md:text-4xl font-bold mb-2 leading-tight">{{ $featuredVideo->title }}</h1>
+                        <p class="hidden md:block text-gray-300 max-w-2xl mb-4 truncate">{{ $featuredVideo->description }}</p>
+                        <div class="flex items-center space-x-4 mt-4">
+                            <a href="{{ route('videos.show', $featuredVideo) }}" class="bg-accent hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-full transition text-sm md:text-base">
+                                Play
                             </a>
-                        @endauth
-                        <!-- END WATCHLIST BUTTON -->
+                            @auth
+                            <form method="POST" action="{{ route('videos.watchlist.toggle', $featuredVideo) }}">
+                                @csrf
+                                <button type="submit" class="text-white font-semibold text-sm md:text-base bg-black/30 hover:bg-black/50 py-2 px-4 rounded-full transition">
+                                    @if(Auth::user()->watchlist()->where('video_id', $featuredVideo->id)->exists())
+                                        ✓ Added to Watchlist
+                                    @else
+                                        + Add to Watchlist
+                                    @endif
+                                </button>
+                            </form>
+                            @endauth
+                        </div>
                     </div>
                 </div>
-                <!-- END OF RESPONSIVE FIX -->
-            </div>
             @endif
 
-            <!-- Horizontal Scrolling Rows for Categories with Navigation Arrows -->
+
+            <!-- Horizontal Scrolling Rows with Like Buttons -->
             @foreach ($categories as $category)
                 <div class="mb-8">
                     <a href="{{ route('categories.show', $category) }}" class="inline-block">
                         <h2 class="text-2xl font-bold text-white mb-4 hover:text-accent transition-colors">{{ $category->name }}</h2>
                     </a>
 
-                    <!-- Alpine.js Component for the Scroller -->
                     <div x-data="{
                             scrollContainer: null,
                             init() {
@@ -71,15 +61,38 @@
                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                         </button>
 
-                        <!-- The Scrollable Container -->
-                        <div x-ref="container" class="flex space-x-4 overflow-x-auto pb-4 scrollbar-hide">
+                                               <div x-ref="container" class="flex space-x-4 overflow-x-auto pb-4 scrollbar-hide">
                             @foreach ($category->videos as $video)
                                 <div class="flex-shrink-0 w-64">
                                     <a href="{{ route('videos.show', $video) }}" class="block bg-secondary rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-200">
                                         <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" class="w-full h-36 object-cover">
-                                        <div class="p-3">
-                                            <h3 class="font-semibold truncate">{{ $video->title }}</h3>
+                                        
+                                        <!-- UPDATED SECTION WITH LIKE BUTTON -->
+                                        <div class="p-3 flex justify-between items-center">
+                                            <h3 class="font-semibold truncate pr-2">{{ $video->title }}</h3>
+                                            
+                                            @auth
+                                                <form method="POST" action="{{ route('videos.like', $video) }}">
+                                                    @csrf
+                                                    <button type="submit">
+                                                        @if(Auth::user()->likes()->where('video_id', $video->id)->exists())
+                                                            <!-- Filled Heart (Liked) -->
+                                                            <svg class="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
+                                                        @else
+                                                            <!-- Outline Heart (Not Liked) -->
+                                                            <svg class="w-6 h-6 text-gray-400 hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.5l1.318-1.182a4.5 4.5 0 116.364 6.364L12 21.5l-7.682-7.682a4.5 4.5 0 010-6.364z"></path></svg>
+                                                        @endif
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <!-- Disabled Heart for Guests -->
+                                                <span class="cursor-pointer" onclick="window.location.href='{{ route('login') }}'">
+                                                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.5l1.318-1.182a4.5 4.5 0 116.364 6.364L12 21.5l-7.682-7.682a4.5 4.5 0 010-6.364z"></path></svg>
+                                                </span>
+                                            @endauth
                                         </div>
+                                        <!-- END OF UPDATED SECTION -->
+
                                     </a>
                                 </div>
                             @endforeach
@@ -91,10 +104,9 @@
                         >
                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                         </button>
-                    </div>
+                  </div>
                 </div>
             @endforeach
-
         </div>
     </div>
 </x-app-layout>
