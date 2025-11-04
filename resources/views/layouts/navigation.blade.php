@@ -36,7 +36,7 @@
         font-family="'Poppins', sans-serif" 
         font-size="24" 
         font-weight="600" 
-        fill="#FFFFF">
+        fill="#8c8c8d">
     Bliss Films
   </text>
 </svg>
