@@ -55,6 +55,7 @@
             and then "Add to Home Screen".
         </div>
 
+
         <!-- PWA Logic Script -->
         <script>
             // Logic for Android/Windows Install Prompt
