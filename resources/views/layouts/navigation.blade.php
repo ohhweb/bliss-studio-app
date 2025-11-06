@@ -6,41 +6,36 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('home') }}">
-                        <svg width="200" height="50" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
-  <!-- Define the gradient for the icon -->
-  <defs>
-    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#FFB74D;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#FB8C00;stop-opacity:1" />
-    </linearGradient>
-  </defs>
-  
-  <!-- Icon Path (Stylized B) -->
-  <g transform="translate(5, 5) scale(0.8)">
-    <path d="M20 0 L0 0 L0 40 L20 40 L20 25 C25 25 25 20 20 20 L0 20 M0 0 L20 0 L20 15 C25 15 25 20 20 20" 
-          fill="none" 
-          stroke="url(#logoGradient)" 
-          stroke-width="5" 
-          stroke-linecap="round" 
-          stroke-linejoin="round"/>
-    <path d="M30 0 L50 0 L50 40 L30 40 L30 25 C25 25 25 20 30 20 L50 20 M50 0 L30 0 L30 15 C25 15 25 20 30 20" 
-          fill="none" 
-          stroke="url(#logoGradient)" 
-          stroke-width="5" 
-          stroke-linecap="round" 
-          stroke-linejoin="round"/>
-  </g>
-  
-  <!-- Text: Bliss Films -->
-  <text x="65" y="32" 
-        font-family="'Poppins', sans-serif" 
-        font-size="24" 
-        font-weight="600" 
-        fill="#8c8c8d">
-    Bliss Films
-  </text>
-</svg>
-                        <!-- <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" /> -->
+                        <!-- <svg width="200" height="50" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#FFB74D;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#FB8C00;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <g transform="translate(5, 5) scale(0.8)">
+                            <path d="M20 0 L0 0 L0 40 L20 40 L20 25 C25 25 25 20 20 20 L0 20 M0 0 L20 0 L20 15 C25 15 25 20 20 20" 
+                                fill="none" 
+                                stroke="url(#logoGradient)" 
+                                stroke-width="5" 
+                                stroke-linecap="round" 
+                                stroke-linejoin="round"/>
+                            <path d="M30 0 L50 0 L50 40 L30 40 L30 25 C25 25 25 20 30 20 L50 20 M50 0 L30 0 L30 15 C25 15 25 20 30 20" 
+                                fill="none" 
+                                stroke="url(#logoGradient)" 
+                                stroke-width="5" 
+                                stroke-linecap="round" 
+                                stroke-linejoin="round"/>
+                        </g>
+                        <text x="65" y="32" 
+                                font-family="'Poppins', sans-serif" 
+                                font-size="24" 
+                                font-weight="600" 
+                                fill="#8c8c8d">
+                            Bliss Films
+                        </text>
+                        </svg> -->
+                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                     </a>
                 </div>
 
