@@ -22,7 +22,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('videos.update', $video) }}">
+                    <form method="POST" action="{{ route('admin.videos.update', $video) }}">
                         @csrf
                         @method('PUT')
 
@@ -76,7 +76,7 @@
 
                         <!-- Submit Button -->
                         <div class="flex items-center justify-end mt-4">
-                             <a href="{{ route('videos.index') }}" class="text-gray-600 hover:text-gray-900 mr-4">Cancel</a>
+                             <a href="{{ route('admin.videos.index') }}" class="text-gray-600 hover:text-gray-900 mr-4">Cancel</a>
                             <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                 Update Video
                             </button>
