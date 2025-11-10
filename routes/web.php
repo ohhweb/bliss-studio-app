@@ -96,8 +96,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-// Import All Necessary Controllers
-use App\Http\Controllers\CommentController;
+// --- Import All Necessary Controllers ---
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\CategoryController;
@@ -107,10 +106,12 @@ use App\Http\Controllers\LikeController;
 use App\Http\Controllers\WatchlistController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\CommentController; // <-- Import the new controller
+// Admin Controllers
 use App\Http\Controllers\Admin\VideoController as AdminVideoController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\DeviceController;
-use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\UserController;  
 
 /*
 |--------------------------------------------------------------------------
@@ -169,6 +170,7 @@ Route::middleware(['auth', 'subscribed', 'is_not_blocked'])->group(function () {
     Route::get('/videos/{video}', [VideoController::class, 'show'])->name('videos.show');
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
     Route::get('/categories/{category:slug}', [CategoryController::class, 'show'])->name('categories.show');
+        Route::post('/videos/{video}/comments', [CommentController::class, 'store'])->name('comments.store');
 });
 
 
@@ -180,7 +182,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::patch('/users/{user}/block', [UserController::class, 'block'])->name('users.block');
     Route::patch('/users/{user}/unblock', [UserController::class, 'unblock'])->name('users.unblock');
-     Route::post('/videos/{video}/comments', [CommentController::class, 'store'])->name('comments.store');
+
 });
 
 // The auth routes (login, register, etc.) are automatically included by Laravel 11.
