@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckIfBlocked
+class RedirectIfNotBlocked
 {
     /**
      * Handle an incoming request.
@@ -16,17 +16,16 @@ class CheckIfBlocked
     public function handle(Request $request, Closure $next): Response
     {
         // First, make sure a user is actually logged in.
-        // The 'auth' middleware should run before this, but this is a safety check.
         if (auth()->check()) {
             
-            // Check if the user's status is 'blocked' or 'unblock_request'
-            if (in_array(auth()->user()->status, ['blocked', 'unblock_request'])) {
-                // If they are blocked, redirect them to the 'blocked' notice page.
-                return redirect()->route('blocked.notice');
+            // Check if the user's status is 'active' (meaning they are NOT blocked).
+            if (auth()->user()->status === 'active') {
+                // If they are active, redirect them to the homepage.
+                return redirect()->route('home');
             }
         }
 
-        // If the user is not blocked, allow the request to proceed.
+        // If the user IS blocked or a guest, allow them to see the page.
         return $next($request);
     }
 }
