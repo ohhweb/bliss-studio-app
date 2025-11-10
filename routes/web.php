@@ -97,6 +97,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // Import All Necessary Controllers
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\CategoryController;
@@ -179,6 +180,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::patch('/users/{user}/block', [UserController::class, 'block'])->name('users.block');
     Route::patch('/users/{user}/unblock', [UserController::class, 'unblock'])->name('users.unblock');
+     Route::post('/videos/{video}/comments', [CommentController::class, 'store'])->name('comments.store');
 });
 
 // The auth routes (login, register, etc.) are automatically included by Laravel 11.

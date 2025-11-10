@@ -42,4 +42,8 @@ public function devices(): HasMany
 {
     return $this->hasMany(Device::class);
 }
+public function comments(): HasMany
+{
+    return $this->hasMany(Comment::class);
+}
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -32,4 +33,8 @@ class Video extends Model
     {
         return $this->belongsToMany(User::class, 'watchlists');
     }
+    public function comments(): HasMany
+{
+    return $this->hasMany(Comment::class);
+}
 }
