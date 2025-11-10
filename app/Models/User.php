@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -36,4 +37,9 @@ class User extends Authenticatable
         // withTimestamps() is important to automatically update the 'updated_at' timestamp
         return $this->belongsToMany(Video::class, 'watched_histories')->withTimestamps();
     }
+    // Inside the User class
+public function devices(): HasMany
+{
+    return $this->hasMany(Device::class);
+}
 }

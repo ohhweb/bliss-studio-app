@@ -12,12 +12,16 @@ class HomeController extends Controller
     /**
      * Display the homepage with categories and videos.
      */
-    public function index()
-    {
-        $featuredVideo = Video::latest()->first();
-        $categories = Category::has('videos')->with('videos')->get();
-        return view('home', compact('categories', 'featuredVideo'));
-    }
+   public function index()
+{
+    // Fetch the 5 latest videos for the slider
+    $featuredVideos = Video::latest()->take(5)->get(); // <-- CHANGE THIS LINE
+
+    // Fetch all categories with their videos for the scrolling rows
+    $categories = Category::has('videos')->with('videos')->get();
+
+    return view('home', compact('categories', 'featuredVideos')); // <-- `featuredVideos` is now a collection
+}
 
     /**
      * Search for videos based on a query.

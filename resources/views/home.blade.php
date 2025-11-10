@@ -3,35 +3,81 @@
     <div class="bg-primary text-white">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-8">
 
-            <!-- Hero Section (No changes here) -->
-            @if($featuredVideo)
-                {{-- ... Your existing Hero Section code ... --}}
-                <div class="mb-12 rounded-lg overflow-hidden relative aspect-w-16 aspect-h-9">
-                    <img src="{{ $featuredVideo->thumbnail_url }}" alt="{{ $featuredVideo->title }}" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-                    <div class="absolute bottom-0 left-0 p-4 md:p-8">
-                        <h1 class="text-2xl md:text-4xl font-bold mb-2 leading-tight">{{ $featuredVideo->title }}</h1>
-                        <p class="hidden md:block text-gray-300 max-w-2xl mb-4 truncate">{{ $featuredVideo->description }}</p>
-                        <div class="flex items-center space-x-4 mt-4">
-                            <a href="{{ route('videos.show', $featuredVideo) }}" class="bg-accent hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-full transition text-sm md:text-base">
-                                Play
-                            </a>
-                            @auth
-                            <form method="POST" action="{{ route('videos.watchlist.toggle', $featuredVideo) }}">
-                                @csrf
-                                <button type="submit" class="text-white font-semibold text-sm md:text-base bg-black/30 hover:bg-black/50 py-2 px-4 rounded-full transition">
-                                    @if(Auth::user()->watchlist()->where('video_id', $featuredVideo->id)->exists())
-                                        ✓ Added to Watchlist
-                                    @else
-                                        + Add to Watchlist
-                                    @endif
-                                </button>
-                            </form>
-                            @endauth
-                        </div>
+           <!-- Hero Slider Section -->
+@if($featuredVideos->isNotEmpty())
+<div class="mb-12 rounded-lg overflow-hidden relative">
+    <!-- Swiper container -->
+    <div class="swiper">   <!-- h-[50vh] -->
+        <div class="swiper-wrapper">
+            <!-- Loop through each featured video to create a slide -->
+            @foreach($featuredVideos as $featuredVideo)
+            <div class="swiper-slide relative">
+                <img src="{{ $featuredVideo->thumbnail_url }}" alt="{{ $featuredVideo->title }}" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 p-4 md:p-8">
+                    <h1 class="text-2xl md:text-4xl font-bold mb-2 leading-tight">{{ $featuredVideo->title }}</h1>
+                    <div class="flex items-center space-x-4 mt-4">
+                        <a href="{{ route('videos.show', $featuredVideo) }}" class="bg-accent hover:bg-orange-600 text-white font-bold py-2 px-6 rounded-full transition text-sm md:text-base">
+                            Play
+                        </a>
+                        {{-- Watchlist button logic remains the same --}}
+                        @auth
+                        <form method="POST" action="{{ route('videos.watchlist.toggle', $featuredVideo) }}">
+                            @csrf
+                            <button type="submit" class="text-white font-semibold text-sm md:text-base bg-black/30 hover:bg-black/50 py-2 px-4 rounded-full transition">
+                                @if(Auth::user()->watchlist()->where('video_id', $featuredVideo->id)->exists())
+                                    ✓ Added to Watchlist
+                                @else
+                                    + Add to Watchlist
+                                @endif
+                            </button>
+                        </form>
+                        @endauth
                     </div>
                 </div>
-            @endif
+            </div>
+            @endforeach
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+    </div>
+</div>
+@endif
+
+<!-- Include Swiper initialization script -->
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const swiper = new Swiper('.swiper', {
+            // Optional parameters
+            loop: true,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            // If we need pagination
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+        });
+    });
+</script>
+@endpush
+
+<!-- Add custom styles for Swiper pagination -->
+@push('styles')
+<style>
+    .swiper-pagination-bullet {
+        background: rgba(255, 255, 255, 0.5);
+        width: 10px;
+        height: 10px;
+    }
+    .swiper-pagination-bullet-active {
+        background: #FB8C00; /* Your accent color */
+    }
+</style>
+@endpush
 
 
             <!-- Horizontal Scrolling Rows with Like Buttons -->

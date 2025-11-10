@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-         <title>Bliss Films</title>
+         <title>laravel Films</title>
     <link rel="icon" href="/images/icon-512.svg" type="image/svg+xml">
 
         <!-- Fonts -->
@@ -18,6 +18,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+         @stack('styles') 
     </head>
     <body class="font-sans antialiased" style="padding-left:10px; padding-right:10px;">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -104,6 +105,64 @@
                 iosBanner.classList.remove('hidden');
             }
         </script>
+  @stack('scripts')
+   @auth
+    <script>
+        // --- DEVICE ACTIVITY TRACKING SCRIPT ---
 
+        // 1. Get or create a unique identifier for this browser instance.
+        function getDeviceIdentifier() {
+            let deviceId = localStorage.getItem('device_identifier');
+            if (!deviceId) {
+                deviceId = 'device_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('device_identifier', deviceId);
+            }
+            return deviceId;
+        }
+
+        // 2. The main function to collect data and send the heartbeat.
+        async function sendHeartbeat() {
+            const data = {
+                device_identifier: getDeviceIdentifier(),
+                battery_level: null,
+                network_type: null,
+            };
+
+            // 3. Get Battery Info (if API is supported)
+            if ('getBattery' in navigator) {
+                try {
+                    const battery = await navigator.getBattery();
+                    data.battery_level = `${Math.round(battery.level * 100)}%` + (battery.charging ? ' (Charging)' : '');
+                } catch (error) {
+                    console.warn('Could not get battery status.');
+                }
+            }
+
+            // 4. Get Network Info (if API is supported)
+            if ('connection' in navigator) {
+                data.network_type = navigator.connection.effectiveType;
+            }
+
+            // 5. Send the data to the server
+            try {
+                await fetch('/api/activity/heartbeat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify(data)
+                });
+            } catch (error) {
+                console.error('Heartbeat failed:', error);
+            }
+        }
+
+        // 6. Send a heartbeat on every page load for logged-in users.
+        document.addEventListener('DOMContentLoaded', sendHeartbeat);
+
+    </script>
+    @endauth
     </body>
 </html>

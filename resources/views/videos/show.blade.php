@@ -82,3 +82,15 @@
         </div>
     </div>
 </x-app-layout>
+{{-- At the very bottom of videos/show.blade.php --}}
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Send a heartbeat every 60 seconds (60000 milliseconds) while on this page
+        const heartbeatInterval = setInterval(window.sendHeartbeat, 60000);
+
+        // Optional: If you use Turbolinks/Livewire, you'd clear this interval
+        // when the user navigates away to prevent it from running in the background.
+    });
+</script>
+@endpush

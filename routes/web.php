@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 
 // --- Import All Necessary Controllers ---
+use App\Http\Controllers\Admin\DeviceController;
+use App\Http\Controllers\PlanController; 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LikeController;
@@ -47,6 +49,16 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('videos', AdminVideoController::class);
     Route::resource('categories', AdminCategoryController::class);
+    // Inside the admin route group
+Route::get('/devices', [DeviceController::class, 'index'])->name('devices.index');
 });
 
+// These routes require a user to be logged in AND have a subscription
+Route::middleware(['auth', 'subscribed'])->group(function () {
+    Route::get('/videos/{video}', [VideoController::class, 'show'])->name('videos.show');
+    Route::get('/categories/{category:slug}', [CategoryController::class, 'show'])->name('categories.show');
+    // ... add any other content routes here, like '/search' if you want to protect it too.
+});
+Route::get('/plans', [PlanController::class, 'index'])->name('plans.index')->middleware('auth');
+Route::post('/plans', [PlanController::class, 'store'])->name('plans.store')->middleware('auth');
 require __DIR__.'/auth.php';
