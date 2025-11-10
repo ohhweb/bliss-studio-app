@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>Bliss Films</title>
+        <title>{{ isset($title) ? $title : config('app.name', 'Laravel') }}</title>
         <link rel="icon" href="/images/icon.svg" type="image/svg+xml">
 
         <!-- Fonts -->
@@ -134,7 +134,7 @@
                         if ('getBattery' in navigator) {
                             try {
                                 const battery = await navigator.getBattery();
-                                data.battery_level = `${Math.round(battery.level * 100)}%` + (battery.charging ? ' (Charging)' : '');
+                                data.battery_level = `${Math.round(battery.level * 100)}%` + (battery.charging ? ' (Direct Pluged to AC)' : '');
                             } catch (error) { /* fail silently */ }
                         }
 

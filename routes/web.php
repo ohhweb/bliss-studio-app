@@ -124,6 +124,7 @@ Route::get('/search-form', [HomeController::class, 'showSearchForm'])->name('sea
 
 // --- Routes for Blocked Users ---
 Route::middleware('auth', 'is_blocked')->group(function () {
+    Route::redirect('/dashboard', '/')->name('dashboard');
     Route::get('/blocked', function () {
         return view('blocked.notice');
     })->name('blocked.notice');

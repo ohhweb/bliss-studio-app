@@ -1,4 +1,5 @@
 <x-app-layout>
+    <x-slot name="title">{{ $video->title }} - Bliss Films</x-slot>
     <div class="py-12 bg-gray-900" x-data="{ playing: false }">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
