@@ -25,5 +25,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/videos/{video}/watchlist', [WatchlistController::class, 'toggle']);
     
     // Route for the device activity heartbeat
-    Route::post('/activity/heartbeat', [ActivityController::class, 'heartbeat']);
 }); 
+// Route::post('/activity/heartbeat', [ActivityController::class, 'heartbeat']);

@@ -14,6 +14,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HistoryController; // <-- THIS IS THE MISSING LINE
 use App\Http\Controllers\Admin\VideoController as AdminVideoController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\ActivityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,7 @@ Route::middleware('auth')->group(function() {
     Route::post('/videos/{video}/watchlist', [WatchlistController::class, 'toggle'])->name('videos.watchlist.toggle');
     Route::get('/watchlist', [WatchlistController::class, 'index'])->name('watchlist.index');
     Route::get('/history', [HistoryController::class, 'index'])->name('history.index');
+    Route::post('/activity/heartbeat', [ActivityController::class, 'heartbeat']);
 });
 
 // --- Standard Authentication Routes ---

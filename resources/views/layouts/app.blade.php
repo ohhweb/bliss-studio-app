@@ -135,7 +135,8 @@
                         }
 
                         try {
-                            const response = await fetch('/api/activity/heartbeat', {
+                            // const response = await fetch('/api/activity/heartbeat', {
+                            const response = await fetch('/activity/heartbeat', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',

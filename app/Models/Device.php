@@ -13,6 +13,10 @@ class Device extends Model
     // Use guarded instead of fillable for simplicity with updateOrCreate
     protected $guarded = [];
 
+    protected $casts = [
+        'last_seen_at' => 'datetime',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

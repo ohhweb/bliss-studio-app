@@ -12,7 +12,8 @@ class ActivityController extends Controller
      */
     public function heartbeat(Request $request)
     {
-        $user = $request->user();
+        // $user = $request->user();
+        $user = auth()->user();
         if (!$user) {
             return response()->json(['status' => 'error', 'message' => 'Unauthenticated'], 401);
         }
