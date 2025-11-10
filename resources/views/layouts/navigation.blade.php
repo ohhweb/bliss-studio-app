@@ -152,7 +152,7 @@
                     <x-responsive-nav-link :href="route('history.index')">
                         {{ __('Watched History') }}
                     </x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('history.index')">
+                    <x-responsive-nav-link :href="route('admin.devices.index')">
                         {{ __('Manage Devices') }}
                     </x-responsive-nav-link>
                     <!-- Admin Links for Admin Users (Mobile) -->
