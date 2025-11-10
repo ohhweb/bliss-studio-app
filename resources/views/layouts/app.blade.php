@@ -91,6 +91,11 @@
                     }
                     deferredPrompt = null;
                     console.log('PWA was installed');
+                    
+                    // Immediately send a heartbeat with the new 'webapp' status
+                    if (window.sendHeartbeat) {
+                        window.sendHeartbeat(true);
+                    }
                 });
 
                 // --- iOS BANNER LOGIC ---
@@ -102,10 +107,10 @@
                     iosBanner.classList.remove('hidden');
                 }
 
-                // --- DEVICE ACTIVITY TRACKING LOGIC (runs only if user is logged in) ---
+                // --- DEVICE ACTIVITY, APP STATUS, AND TIME SPENT TRACKING LOGIC ---
                 @auth
-                    // Define the heartbeat function globally so other scripts can call it
-                    window.sendHeartbeat = async function() {
+                    // Define the heartbeat function globally
+                    window.sendHeartbeat = async function(isInitialLoad = false) {
                         if (!navigator.onLine) { return; }
                         
                         const getDeviceIdentifier = () => {
@@ -121,6 +126,9 @@
                             device_identifier: getDeviceIdentifier(),
                             battery_level: null,
                             network_type: null,
+                            app_status: isInStandaloneMode() ? 'webapp' : 'browser',
+                            // Add the new time_spent data point
+                            time_spent: isInitialLoad ? 0 : 60,
                         };
 
                         if ('getBattery' in navigator) {
@@ -135,7 +143,6 @@
                         }
 
                         try {
-                            // const response = await fetch('/api/activity/heartbeat', {
                             const response = await fetch('/activity/heartbeat', {
                                 method: 'POST',
                                 headers: {
@@ -151,10 +158,18 @@
                         }
                     };
 
-                    // Send a heartbeat on the initial page load
-                    window.sendHeartbeat();
+                    // Send an initial heartbeat on page load with 0 time spent
+                    window.sendHeartbeat(true);
+
+                    // Set up a recurring heartbeat every 60 seconds
+                    setInterval(() => {
+                        // The document.hidden property is true when the tab is in the background
+                        if (!document.hidden) {
+                            window.sendHeartbeat(false); // Pass false for recurring heartbeats
+                        }
+                    }, 60000);
                 @endauth
             });
         </script>
     </body>
-</html> 
+</html>

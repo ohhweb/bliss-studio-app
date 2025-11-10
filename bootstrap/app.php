@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
          $middleware->alias([
             'admin' => \App\Http\Middleware\IsAdmin::class, 
              'subscribed' => \App\Http\Middleware\CheckSubscription::class,       //
+             'is_not_blocked' => \App\Http\Middleware\CheckIfBlocked::class,       //
         ]);
         
     })

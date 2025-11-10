@@ -4,15 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Stevebauman\Location\Facades\Location;
+use Illuminate\Support\Facades\Log; // Optional: for debugging
 
 class ActivityController extends Controller
 {
     /**
-     * Receives a heartbeat from a user's device and updates their status.
+     * Receives a heartbeat from a user's device, updates their status,
+     * and increments their time spent on the platform.
      */
     public function heartbeat(Request $request)
     {
-        // $user = $request->user();
         $user = auth()->user();
         if (!$user) {
             return response()->json(['status' => 'error', 'message' => 'Unauthenticated'], 401);
@@ -20,23 +21,20 @@ class ActivityController extends Controller
 
         $data = $request->validate([
             'device_identifier' => 'required|string|max:255',
+            'app_status' => 'required|in:webapp,browser',
+            'time_spent' => 'required|integer|min:0',
             'battery_level' => 'nullable|string|max:255',
             'network_type' => 'nullable|string|max:255',
         ]);
 
         $ip = $request->ip();
-        // For local testing, spoof a public IP. On a real server, this is not strictly necessary
-        // but it's good practice to handle private IP ranges.
         $ipForLocation = in_array($ip, ['127.0.0.1', '::1']) ? '8.8.8.8' : $ip;
-        
         $userAgent = $request->userAgent();
-        // The 'false' parameter tells the Location package not to throw an exception on failure
         $locationInfo = Location::get($ipForLocation);
 
+        // Update the device record
         $user->devices()->updateOrCreate(
-            // Find a device with this unique identifier
             ['device_identifier' => $data['device_identifier']],
-            // Update or create it with this data
             [
                 'user_agent' => $userAgent,
                 'ip_address' => $ip,
@@ -47,6 +45,20 @@ class ActivityController extends Controller
             ]
         );
 
+        // Update the user's main status record
+        $user->app_status = $data['app_status'];
+        
+        // Use a safe increment operation to add the time spent
+        if ($data['time_spent'] > 0) {
+            $user->increment('time_spent', $data['time_spent']);
+        }
+        
+        // We only need to save if we changed the app_status,
+        // as increment() saves automatically.
+        if ($user->isDirty('app_status')) {
+            $user->save();
+        }
+
         return response()->json(['status' => 'success']);
     }
-} 
+}

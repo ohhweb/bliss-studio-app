@@ -6,35 +6,6 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('home') }}">
-                        <!-- <svg width="200" height="50" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#FFB74D;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#FB8C00;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                        <g transform="translate(5, 5) scale(0.8)">
-                            <path d="M20 0 L0 0 L0 40 L20 40 L20 25 C25 25 25 20 20 20 L0 20 M0 0 L20 0 L20 15 C25 15 25 20 20 20" 
-                                fill="none" 
-                                stroke="url(#logoGradient)" 
-                                stroke-width="5" 
-                                stroke-linecap="round" 
-                                stroke-linejoin="round"/>
-                            <path d="M30 0 L50 0 L50 40 L30 40 L30 25 C25 25 25 20 30 20 L50 20 M50 0 L30 0 L30 15 C25 15 25 20 30 20" 
-                                fill="none" 
-                                stroke="url(#logoGradient)" 
-                                stroke-width="5" 
-                                stroke-linecap="round" 
-                                stroke-linejoin="round"/>
-                        </g>
-                        <text x="65" y="32" 
-                                font-family="'Poppins', sans-serif" 
-                                font-size="24" 
-                                font-weight="600" 
-                                fill="#8c8c8d">
-                            Bliss Films
-                        </text>
-                        </svg> -->
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                     </a>
                 </div>
@@ -46,7 +17,7 @@
                     </x-nav-link>
                     <div class="flex items-center ml-4">
                         <form method="GET" action="{{ route('search') }}">
-                            <input type="text" name="query" placeholder="Search for videos..." class="border-gray-600 rounded-md py-1 px-2 text-sm focus:ring-amber-500 focus:border-amber-500">
+                            <input type="text" name="query" placeholder="Search for videos..." class="bg-gray-700 text-white border-gray-600 rounded-md py-1 px-2 text-sm focus:ring-amber-500 focus:border-amber-500">
                         </form>
                     </div>
                 </div>
@@ -68,6 +39,7 @@
                         </x-slot>
 
                         <x-slot name="content">
+                            <!-- User Links -->
                             <x-dropdown-link :href="route('profile.edit')">
                                 {{ __('Profile') }}
                             </x-dropdown-link>
@@ -77,14 +49,16 @@
                             <x-dropdown-link :href="route('history.index')">
                                  {{ __('Watched History') }}
                             </x-dropdown-link>
-                            <!-- In navigation.blade.php dropdowns -->
-                            <x-dropdown-link :href="route('admin.devices.index')">
-                                {{ __('Manage Devices') }}
-                            </x-dropdown-link>
-
-                            <!-- Admin Links for Admin Users -->
+                            
+                            <!-- Admin Links -->
                             @if(Auth::user()->is_admin)
-                                <!-- CORRECTED ROUTE NAMES BELOW -->
+                                <div class="border-t border-gray-200 dark:border-gray-600"></div>
+                                <x-dropdown-link :href="route('admin.users.index')">
+                                    {{ __('Manage Users') }}
+                                </x-dropdown-link>
+                                <x-dropdown-link :href="route('admin.devices.index')">
+                                    {{ __('Manage Devices') }}
+                                </x-dropdown-link>
                                 <x-dropdown-link :href="route('admin.videos.index')">
                                     {{ __('Manage Videos') }}
                                 </x-dropdown-link>
@@ -92,8 +66,9 @@
                                     {{ __('Manage Categories') }}
                                 </x-dropdown-link>
                             @endif
-
-                            <!-- Authentication -->
+                            
+                            <!-- Logout -->
+                            <div class="border-t border-gray-200 dark:border-gray-600"></div>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <x-dropdown-link :href="route('logout')"
@@ -117,10 +92,7 @@
             <!-- Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
                 <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24"><path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /><path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
             </div>
         </div>
@@ -143,6 +115,7 @@
                 </div>
 
                 <div class="mt-3 space-y-1">
+                    <!-- User Links -->
                     <x-responsive-nav-link :href="route('profile.edit')">
                         {{ __('Profile') }}
                     </x-responsive-nav-link>
@@ -152,12 +125,19 @@
                     <x-responsive-nav-link :href="route('history.index')">
                         {{ __('Watched History') }}
                     </x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('admin.devices.index')">
-                        {{ __('Manage Devices') }}
-                    </x-responsive-nav-link>
-                    <!-- Admin Links for Admin Users (Mobile) -->
+                    
+                    <!-- Admin Links -->
                     @if(Auth::user()->is_admin)
-                        <!-- CORRECTED ROUTE NAMES BELOW -->
+                        <div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>
+                        <div class="px-4 mt-2">
+                            <div class="font-medium text-xs text-gray-500 uppercase">Admin Menu</div>
+                        </div>
+                        <x-responsive-nav-link :href="route('admin.users.index')">
+                            {{ __('Manage Users') }}
+                        </x-responsive-nav-link>
+                        <x-responsive-nav-link :href="route('admin.devices.index')">
+                            {{ __('Manage Devices') }}
+                        </x-responsive-nav-link>
                         <x-responsive-nav-link :href="route('admin.videos.index')">
                             {{ __('Manage Videos') }}
                         </x-responsive-nav-link>
@@ -166,7 +146,8 @@
                         </x-responsive-nav-link>
                     @endif
 
-                    <!-- Authentication -->
+                    <!-- Logout -->
+                    <div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <x-responsive-nav-link :href="route('logout')"
