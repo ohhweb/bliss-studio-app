@@ -160,3 +160,7 @@
     });
 </script>
 @endpush
+<style>
+    .w-10.h-10.rounded-full.bg-secondary.flex.items-center.justify-center.font-bold {
+    background-color: white;
+}</style>
